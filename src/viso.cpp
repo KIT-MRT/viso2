@@ -24,6 +24,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include <math.h>
 
 using namespace std;
+namespace viso2 {
 
 VisualOdometry::VisualOdometry (parameters param) : param(param) {
   J         = 0;
@@ -103,4 +104,5 @@ vector<int32_t> VisualOdometry::getRandomSample(int32_t N,int32_t num) {
   
   // return sample
   return sample;
+}
 }

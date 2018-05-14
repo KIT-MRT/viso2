@@ -22,8 +22,9 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include "viso_mono.h"
 
 using namespace std;
+namespace viso2 {
 
-VisualOdometryMono::VisualOdometryMono (parameters param) : param(param), VisualOdometry((VisualOdometry::parameters)param) {
+VisualOdometryMono::VisualOdometryMono (parameters param) : VisualOdometry((VisualOdometry::parameters)param), param(param) {
 }
 
 VisualOdometryMono::~VisualOdometryMono () {
@@ -397,4 +398,5 @@ int32_t VisualOdometryMono::triangulateChieral (vector<Matcher::p_match> &p_matc
   
   // return number of inliers
   return num;
+}
 }

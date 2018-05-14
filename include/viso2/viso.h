@@ -25,6 +25,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include "matrix.h"
 #include "matcher.h"
 
+namespace viso2 {
+
 class VisualOdometry {
 
 public:
@@ -139,6 +141,6 @@ private:
   
   parameters                    param;     // common parameters
 };
-
+}
 #endif // VISO_H
 

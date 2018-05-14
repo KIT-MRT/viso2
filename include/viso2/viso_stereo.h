@@ -24,6 +24,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 #include "viso.h"
 
+namespace viso2 {
+
 class VisualOdometryStereo : public VisualOdometry {
 
 public:
@@ -44,7 +46,7 @@ public:
 
   // constructor, takes as inpute a parameter structure
   VisualOdometryStereo (parameters param);
-  
+  VisualOdometryStereo(const VisualOdometryStereo&) = delete;
   // deconstructor
   ~VisualOdometryStereo ();
   
@@ -81,6 +83,8 @@ private:
   // parameters
   parameters param;
 };
+
+}
 
 #endif // VISO_STEREO_H
 

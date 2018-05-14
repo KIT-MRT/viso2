@@ -29,6 +29,9 @@ using namespace std;
 // PUBLIC FUNCTIONS //
 //////////////////////
 
+namespace viso2 {
+
+
 // constructor (with default parameters)
 Matcher::Matcher(parameters param) : param(param) {
 
@@ -92,7 +95,7 @@ Matcher::~Matcher() {
   if (I2c_dv_full)  _mm_free(I2c_dv_full);
 }
 
-void Matcher::pushBack (uint8_t *I1,uint8_t* I2,int32_t* dims,const bool replace) {
+void Matcher::pushBack(uint8_t* I1, uint8_t* I2, int32_t* dims, const bool replace, cv::Mat mask) {
 
   // image dimensions
   int32_t width  = dims[0];
@@ -174,10 +177,15 @@ void Matcher::pushBack (uint8_t *I1,uint8_t* I2,int32_t* dims,const bool replace
     }
   }
 
+  // if mask is unset use all features
+  if (mask.cols == 0 && mask.rows == 0){
+    mask = cv::Mat(height, width, CV_8UC1, 255);
+    assert(mask.cols == width && mask.rows == height);
+  }
   // compute new features for current frame
-  computeFeatures(I1c,dims_c,m1c1,n1c1,m1c2,n1c2,I1c_du,I1c_dv,I1c_du_full,I1c_dv_full);
+  computeFeatures(I1c,dims_c,m1c1,n1c1,m1c2,n1c2,I1c_du,I1c_dv,I1c_du_full,I1c_dv_full, mask);
   if (I2!=0)
-    computeFeatures(I2c,dims_c,m2c1,n2c1,m2c2,n2c2,I2c_du,I2c_dv,I2c_du_full,I2c_dv_full);
+    computeFeatures(I2c,dims_c,m2c1,n2c1,m2c2,n2c2,I2c_du,I2c_dv,I2c_du_full,I2c_dv_full, mask);
 }
 
 void Matcher::matchFeatures(int32_t method, Matrix *Tr_delta) {
@@ -646,7 +654,7 @@ uint8_t* Matcher::createHalfResolutionImage(uint8_t *I,const int32_t* dims) {
   return I_half;
 }
 
-void Matcher::computeFeatures (uint8_t *I,const int32_t* dims,int32_t* &max1,int32_t &num1,int32_t* &max2,int32_t &num2,uint8_t* &I_du,uint8_t* &I_dv,uint8_t* &I_du_full,uint8_t* &I_dv_full) {
+void Matcher::computeFeatures (uint8_t *I,const int32_t* dims,int32_t* &max1,int32_t &num1,int32_t* &max2,int32_t &num2,uint8_t* &I_du,uint8_t* &I_dv,uint8_t* &I_du_full,uint8_t* &I_dv_full,cv::Mat mask) {
   
   int16_t *I_f1;
   int16_t *I_f2;
@@ -663,6 +671,16 @@ void Matcher::computeFeatures (uint8_t *I,const int32_t* dims,int32_t* &max1,int
     filter::sobel5x5(I,I_du,I_dv,dims[2],dims[1]);
     filter::blob5x5(I,I_f1,dims[2],dims[1]);
     filter::checkerboard5x5(I,I_f2,dims[2],dims[1]);
+    // JG: don't match area where mask is 0
+    const int rows = dims_matching[1], cols = dims_matching[0], step = dims_matching[2];
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j){
+        if (mask.at<uint8_t>(i, j) == 0) {
+          I_f1[j + i * step] = 0;
+          I_f2[j + i * step] = 0;
+        }
+      }
+    }
   } else {
     uint8_t* I_matching = createHalfResolutionImage(I,dims);
     getHalfResolutionDimensions(dims,dims_matching);
@@ -677,6 +695,16 @@ void Matcher::computeFeatures (uint8_t *I,const int32_t* dims,int32_t* &max1,int
     filter::blob5x5(I_matching,I_f1,dims_matching[2],dims_matching[1]);
     filter::checkerboard5x5(I_matching,I_f2,dims_matching[2],dims_matching[1]);
     _mm_free(I_matching);
+    // JG: don't match area where mask is 0
+    const int rows = dims_matching[1], cols = dims_matching[0], step = dims_matching[2];
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j){
+        if (mask.at<uint8_t>(2 * i, 2 * j) == 0) {
+          I_f1[j + i * step] = 0;
+          I_f2[j + i * step] = 0;
+        }
+      }
+    }
   }
   
   // extract sparse maxima (1st pass) via non-maximum suppression
@@ -1591,4 +1619,5 @@ float Matcher::mean(const uint8_t* I,const int32_t &bpl,const int32_t &u_min,con
   return
     mean /= (float)((u_max-u_min+1)*(v_max-v_min+1));
 }
+} // end of namespace viso2
 

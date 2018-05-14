@@ -107,21 +107,3 @@ matcher.h.
 
 Please send any feedback and bugreports to geiger@kit.edu
 Andreas Geiger
-
-+++++++++++++++++++++++++++++++++++
-+        STEREOMAPPER.ZIP         +
-+++++++++++++++++++++++++++++++++++
-
-Due to many requests, we have also included a zip file with the sources
-of the full stereomapper application as presented in the paper, which allows
-for dense reconstruction in real-time. It depends on Qt, libviso2 for visual
-odometry and libelas for stereo estimation. libelas is available from:
-www.cvlibs.net. Note that this code has not been refactored, is very weakly
-commented and comes with absolutely no support. In order to get it running,
-you need to adjust several hard coded paths and maybe fix some OS specific
-components. We won't be able to provide any feedback or support for this
-piece of software, but maybe you still find it useful ..
-
-Best,
-Andreas Geiger
-

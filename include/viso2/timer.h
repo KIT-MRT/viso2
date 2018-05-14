@@ -32,6 +32,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include <sys/time.h>
 #include <stdint.h>
 
+namespace viso2 {
+
 class Timer {
   
 public:
@@ -89,5 +91,5 @@ private:
            ((float)(b.tv_usec-a.tv_usec))*1e-3;
   }
 };
-
+}
 #endif

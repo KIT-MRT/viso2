@@ -24,6 +24,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 #include "viso.h"
 
+namespace viso2 {
+
 class VisualOdometryMono : public VisualOdometry {
 
 public:
@@ -46,6 +48,7 @@ public:
 
   // constructor, takes as inpute a parameter structure
   VisualOdometryMono (parameters param);
+  VisualOdometryMono(const VisualOdometryMono&) = delete;
   
   // deconstructor
   ~VisualOdometryMono ();
@@ -82,6 +85,6 @@ private:
   // parameters
   parameters param;  
 };
-
+}
 #endif // VISO_MONO_H
 

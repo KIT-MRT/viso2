@@ -31,7 +31,10 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include <algorithm>
 #include <vector>
 
+#include <opencv2/opencv.hpp> //for mask
+
 #include "matrix.h"
+namespace viso2 {
 
 class Matcher {
 
@@ -69,7 +72,7 @@ public:
 
   // constructor (with default parameters)
   Matcher(parameters param);
-
+  Matcher(const Matcher&) = delete;
   // deconstructor
   ~Matcher();
   
@@ -107,14 +110,14 @@ public:
   //        replace ........ if this flag is set, the current image is overwritten with
   //                         the input images, otherwise the current image is first copied
   //                         to the previous image (ring buffer functionality, descriptors need
-  //                         to be computed only once)    
-  void pushBack (uint8_t *I1,uint8_t* I2,int32_t* dims,const bool replace);
-  
+  //                         to be computed only once)
+  void pushBack (uint8_t *I1,uint8_t* I2,int32_t* dims,const bool replace,cv::Mat mask=cv::Mat(0,0,CV_8UC1) );
+
   // computes features from a single image and pushes it back to a ringbuffer,
   // which interally stores the features of the current and previous image pair
   // use this function for flow computation
   // parameter description see above
-  void pushBack (uint8_t *I1,int32_t* dims,const bool replace) { pushBack(I1,0,dims,replace); }
+  void pushBack (uint8_t *I1,int32_t* dims,const bool replace,cv::Mat mask=cv::Mat(0,0,CV_8UC1)) { pushBack(I1,0,dims,replace,mask); }
 
   // match features currently stored in ring buffer (current and previous frame)
   // input: method ... 0 = flow, 1 = stereo, 2 = quad matching
@@ -192,7 +195,7 @@ private:
   //          I_du ..... gradient in horizontal direction
   //          I_dv ..... gradient in vertical direction
   // WARNING: max,I_du,I_dv has to be freed by yourself!
-  void computeFeatures (uint8_t *I,const int32_t* dims,int32_t* &max1,int32_t &num1,int32_t* &max2,int32_t &num2,uint8_t* &I_du,uint8_t* &I_dv,uint8_t* &I_du_full,uint8_t* &I_dv_full);
+  void computeFeatures (uint8_t *I, const int32_t* dims, int32_t* &max1, int32_t &num1, int32_t* &max2, int32_t &num2, uint8_t* &I_du, uint8_t* &I_dv, uint8_t* &I_du_full, uint8_t* &I_dv_full, cv::Mat mask);
 
   // matching functions
   void computePriorStatistics (std::vector<Matcher::p_match> &p_matched,int32_t method);
@@ -243,6 +246,6 @@ private:
   std::vector<Matcher::p_match> p_matched_2;
   std::vector<Matcher::range>   ranges;
 };
-
+}
 #endif
 

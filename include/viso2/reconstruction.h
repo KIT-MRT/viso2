@@ -32,6 +32,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include "matcher.h"
 #include "matrix.h"
 
+namespace viso2 {
+
 class Reconstruction {
 
 public:
@@ -108,5 +110,5 @@ private:
   FLOAT *p_observe,*p_predict;  // observed and predicted 2d points
 
 };
-
+}
 #endif // RECONSTRUCTION_H

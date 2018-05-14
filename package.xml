@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>viso2</name>
+  <version>0.0.0</version>
+  <description>Monoscopic and Stereoscopic visual odometry</description>
+
+  <license>GPLv3</license>
+ <maintainer email="johannes.graeter@kit.edu">Johannes Graeter</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mrt_cmake_modules</build_depend>
+  <depend>util_point_matching</depend>
+  <depend>png++</depend>
+  <depend>mrt_opencv</depend>
+
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+  </export>
+</package>

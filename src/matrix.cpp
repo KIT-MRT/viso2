@@ -21,9 +21,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 #include "matrix.h"
 #include <math.h>
-#include <algorithm>
 
-using namespace std;
+namespace viso2 {
 
 #define SWAP(a,b) {temp=a;a=b;b=temp;}
 #define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
@@ -36,6 +35,7 @@ static int32_t iminarg1,iminarg2;
 
 
 using namespace std;
+
 
 Matrix::Matrix () {
   m   = 0;
@@ -434,6 +434,8 @@ bool Matrix::solve (const Matrix &M, FLOAT eps) {
   // loop variables
   int32_t i, icol, irow, j, k, l, ll;
   FLOAT big, dum, pivinv, temp;
+  icol = 0;
+  irow = 0;
   
   // initialize pivots to zero
   for (j=0;j<m;j++) ipiv[j]=0;
@@ -519,6 +521,7 @@ bool Matrix::lu(int32_t *idx, FLOAT &d, FLOAT eps) {
   }
   
   int32_t i,imax,j,k;
+  imax = 0;
   FLOAT   big,dum,sum,temp;
   FLOAT* vv = (FLOAT*)malloc(n*sizeof(FLOAT)); // vv stores the implicit scaling of each row.
   d = 1.0;
@@ -852,3 +855,4 @@ FLOAT Matrix::pythag(FLOAT a,FLOAT b) {
     return (absb == 0.0 ? 0.0 : absb*sqrt(1.0+SQR(absa/absb)));
 }
 
+}
