@@ -9,7 +9,6 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>mrt_cmake_modules</build_depend>
-  <depend>util_point_matching</depend>
   <depend>png++</depend>
   <depend>mrt_opencv</depend>
 
