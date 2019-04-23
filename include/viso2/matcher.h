@@ -137,6 +137,9 @@ public:
   // and you want to cancel the change of (unknown) camera gain.
   float getGain (std::vector<int32_t> inliers);
 
+  // matcher parameters
+  parameters param;
+
 private:
 
   // structure for storing interest points
@@ -228,7 +231,6 @@ private:
   inline float mean(const uint8_t* I,const int32_t &bpl,const int32_t &u_min,const int32_t &u_max,const int32_t &v_min,const int32_t &v_max);
 
   // parameters
-  parameters param;
   int32_t    margin;
   
   int32_t *m1p1,*m2p1,*m1c1,*m2c1;
